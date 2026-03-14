@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Organic Chemistry | Free-Edex</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea);
+      background-size: 400% 400%;
+      animation: flow 20s ease infinite;
+      font-family: 'Poppins', sans-serif;
+      color: #004d40;
+      margin: 0;
+      padding: 0;
+    }
+
+    @keyframes flow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    header img {
+      width: 70%;
+      max-width: 700px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    header h1 {
+      color: #006064;
+      margin-top: 15px;
+      font-weight: 700;
+    }
+
+    .back-btn {
+      text-align: left;
+      margin: 20px 50px;
+    }
+
+    .back-btn a {
+      text-decoration: none;
+      background: linear-gradient(90deg, #00acc1, #00838f);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .back-btn a:hover {
+      background: linear-gradient(90deg, #00838f, #00acc1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .instructions {
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 25px 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      line-height: 1.7;
+      font-size: 16px;
+      color: #004d40;
+    }
+
+    ol {
+      list-style-position: inside;
+      padding: 0;
+    }
+
+    li {
+      background: rgba(255, 255, 255, 0.95);
+      margin: 30px auto;
+      padding: 25px;
+      max-width: 1000px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    li:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .video-pair {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    iframe {
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      width: 48%;
+      height: 315px;
+    }
+
+    @media (max-width: 768px) {
+      iframe {
+        width: 90%;
+        height: 250px;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.8);
+      margin-top: 50px;
+      color: #004d40;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="orgc.jpg" alt="Organic Chemistry Banner">
+    <h1>Welcome to Organic Chemistry</h1>
+  </header>
+
+  
+  <div class="instructions">
+    <h2>📘 Instructions</h2>
+    <p>
+      Click the topic link below to access lectures.<br>
+      To play, click the ▶ button in the center.<br>
+      To open in YouTube, click the YouTube logo at the bottom-right.<br>
+      For practice questions, follow the links given with lectures.
+    </p>
+  </div>
+
+  <ol>
+    <li>
+      <b>GOC - 1 and 2</b>
+      <p>Contains 10 lectures</p>
+      <div class="video-pair">
+        <iframe src="https://www.youtube.com/embed/videoseries?si=xPCI933QWqRH75po&amp;list=PLF_7kfnwLFCGnyrRfiT8251OrVqJzHnBM"></iframe>
+        <iframe src="https://www.youtube.com/embed/videoseries?si=lsll2AW3DuHGhlh7&amp;list=PLbu_fGT0MPston-eVqFqQTiv-YekN33V9"></iframe>
+      </div>
+    </li>
+
+    <li>
+      <b>Hydrocarbons</b>
+      <p>Contains 8 lectures, 2 DPPs, 3 PYQs</p>
+      <div class="video-pair">
+        <iframe src="https://www.youtube.com/embed/videoseries?si=Thi9qjN36Y5BKJub&amp;list=PLbu_fGT0MPsvnkXqujpAti4MKUjAKYqIX"></iframe>
+        <iframe src="https://www.youtube.com/embed/videoseries?si=kh2W9dT2FsyHne2f&amp;list=PLWUtJwe9Mk5095Gc0BSXsT1HqBuSIVotv"></iframe>
+      </div>
+    </li>
+
+    <li><b>Haloalkanes and Haloarenes</b><br><iframe src="https://www.youtube.com/embed/videoseries?si=1cykm75RN98YUTJ8&amp;list=PLF_7kfnwLFCG-Fm0odaUEQjDTEHdyP3PP"></iframe></li>
+    <li><b>Alcohols, Phenols and Ethers</b><br><iframe src="https://www.youtube.com/embed/videoseries?si=CNo2FQcL9chACgvu&amp;list=PLF_7kfnwLFCEllUy1_z114tXRmq7UQJlj"></iframe></li>
+    <li><b>Aldehydes, Ketones and Carboxylic Acids</b><br><iframe src="https://www.youtube.com/embed/jY4vxCf3yzs?si=4vgohL7kqmlV4Rmi"></iframe></li>
+    <li><b>Amines</b><br><iframe src="https://www.youtube.com/embed/czKeoFS4QHg?si=fuupDXaDnX567jel"></iframe></li>
+    <li><b>Biomolecules</b><br><iframe src="https://www.youtube.com/embed/FhMLrf1Sghk?si=8zWUoE0v_qTtafph"></iframe></li>
+    <li><b>Polymers</b><br><iframe src="https://www.youtube.com/embed/aW5tgGTzgiE?si=-kexB9qcQClOouZm"></iframe></li>
+    <li><b>Chemistry in Everyday Life</b><br><iframe src="https://www.youtube.com/embed/_2dOz0DxhYk?si=YNmS0BMP9A1qcikK"></iframe></li>
+  </ol>
+
+  <footer>
+    <i>“What you allow is what will continue.”</i><br>
+    <i>Wish you all the best!</i>
+  </footer>
+</body>
+</html>

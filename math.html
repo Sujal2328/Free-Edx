@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathematics</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #0077ff, #00bfff, #a0e9ff);
+      color: white;
+      text-align: center;
+    }
+    header img {
+      width: 80%;
+      max-width: 800px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      margin-top: 20px;
+    }
+    ol {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 30px 0;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 15px;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    a {
+      color: #fff;
+      background: rgba(0,0,0,0.3);
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+    }
+    a:hover { background: rgba(255,255,255,0.2); }
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      font-style: italic;
+    }
+    /* Chatbot Button */
+    .chatbot-toggle-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s;
+      z-index: 999;
+      background-color: #ffc107;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .chatbot-toggle-btn:hover {
+      transform: scale(1.15);
+    }
+
+    /* Chatbot Window */
+    .chatbot-window {
+      position: fixed;
+      bottom: 110px;
+      right: 30px;
+      width: 420px;
+      max-height: 650px;
+      background: #ffffff;
+      border-radius: 15px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: 0.35s ease-in-out;
+      z-index: 999;
+    }
+
+    .chatbot-window.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .chatbot-window .card-header {
+      background: linear-gradient(90deg, #00bfff, #00bfff);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chatbot-window .card-header button {
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .chatbot-messages {
+      max-height: 480px;
+      overflow-y: auto;
+      padding: 15px;
+      background: #f2f4f8;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-message {
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      max-width: 85%;
+      line-height: 1.4;
+    }
+
+    .chat-message.bot {
+      background: #e0f2f1;
+      color: #00bfff;
+      align-self: flex-start;
+    }
+
+    .chat-message.user {
+      background: #fff3e0;
+      color: #e65100;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .chatbot-input {
+      padding: 15px;
+      background: white;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 8px 12px;
+      outline: none;
+    }
+
+    .chatbot-input button {
+      background: #00bfff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .chatbot-input button:hover {
+      background :#00bfff;
+    }
+
+    /* Scrollbar */
+    .chatbot-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chatbot-messages::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="math.jpg" alt="Mathematics">
+    <h1>Welcome! Explore the Miracle of Mathematics ✨</h1>
+  </header>
+  <p>Choose your area of study below:</p>
+  <ol>
+    <li><strong>Algebra</strong><br><img src="Alzeb.jpg" width="150"><br><br><a href="algebra.html">Go to Algebra</a></li>
+    <li><strong>Calclus</strong><br><img src="Cal.jpg" width="150"><br><br><a href="Calclus.html">Go to Calculus</a></li>
+    <li><strong>Coordinate Geometry</strong><br><img src="coordina.jpg" width="150"><br><br><a href="coordinate.html">Go to Coordinate Geometry</a></li>
+    <li><strong>Vector and 3D</strong><br><img src="Vec.jpg" width="150"><br><br><a href="vector.html">Go to Vector & 3D</a></li>
+  </ol>
+  <footer>
+    Mathematics is the language with which God has written the universe 🌌<br>
+    <i>Wish you all the best!</i>
+  </footer>
+  <!-- CHATBOT TOGGLE BUTTON -->
+  <button id="chatbotToggle" class="chatbot-toggle-btn">💬</button>
+
+  <!-- CHATBOT WINDOW -->
+  <div id="chatbotWindow" class="chatbot-window">
+    <div class="card-header">
+      <span>Maths Doubt Bot</span>
+      <button type="button" id="chatbotClose">&times;</button>
+    </div>
+    
+    <div id="chatbotMessages" class="chatbot-messages">
+      <div class="chat-message bot">
+        Hi! 👋 I'm your Maths doubt helper. Ask me questions about  Alebra, Calclus, Co-ordinate geometry and Vector & 3D .
+      </div>
+    </div>
+    
+    <div class="chatbot-input">
+      <input type="text" id="chatbotInput" placeholder="Type your Maths doubt..." />
+      <button id="chatbotSend">Send</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- CHATBOT SCRIPT -->
+  <script>
+    const chatbotToggle = document.getElementById("chatbotToggle");
+    const chatbotWindow = document.getElementById("chatbotWindow");
+    const chatbotClose = document.getElementById("chatbotClose");
+    const chatbotMessages = document.getElementById("chatbotMessages");
+    const chatbotInput = document.getElementById("chatbotInput");
+    const chatbotSend = document.getElementById("chatbotSend");
+
+    const GEMINI_API_KEY = "AIzaSyAZZmP1CrhQYDSCKPVIB9HZ0ePxFtz-wEM";
+
+    chatbotToggle.addEventListener("click", () => {
+      chatbotWindow.classList.toggle("open");
+    });
+
+    chatbotClose.addEventListener("click", () => {
+      chatbotWindow.classList.remove("open");
+    });
+
+    function addMessage(text, sender) {
+      const div = document.createElement("div");
+      div.classList.add("chat-message", sender);
+      div.textContent = text;
+      chatbotMessages.appendChild(div);
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    async function callGemini(userText) {
+      const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+
+      const body = {
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text:
+                  "You are a helpful JEE Physics tutor. Answer only JEE Physics-related doubts." +
+                  " Explain step by step in simple language and focus on JEE level.\n\nQuestion: " +
+                  userText
+              }
+            ]
+          }
+        ]
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": GEMINI_API_KEY
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("Gemini API error:", response.status, errText);
+        throw new Error("API error: " + response.status);
+      }
+
+      const data = await response.json();
+
+      const text =
+        data.candidates &&
+        data.candidates[0] &&
+        data.candidates[0].content &&
+        data.candidates[0].content.parts &&
+        data.candidates[0].content.parts[0].text
+          ? data.candidates[0].content.parts[0].text
+          : "Sorry, I couldn't understand that.";
+
+      return text;
+    }
+
+    async function handleSend() {
+      const text = chatbotInput.value.trim();
+      if (!text) return;
+
+      addMessage(text, "user");
+      chatbotInput.value = "";
+
+      const thinkingDiv = document.createElement("div");
+      thinkingDiv.classList.add("chat-message", "bot");
+      thinkingDiv.textContent = "Thinking...";
+      chatbotMessages.appendChild(thinkingDiv);
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+      try {
+        const reply = await callGemini(text);
+        thinkingDiv.textContent = reply;
+      } catch (err) {
+        console.error(err);
+        thinkingDiv.textContent =
+          "There was an error talking to Gemini. Please check your API key or try again.";
+      }
+    }
+
+    chatbotSend.addEventListener("click", handleSend);
+
+    chatbotInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+  </script>
+</body>
+</html>

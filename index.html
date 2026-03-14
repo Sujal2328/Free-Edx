@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Free-Edex | Learn Smart, Learn Free</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Chatbot Button */
+    .chatbot-toggle-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s;
+      z-index: 999;
+      background-color: #ffc107;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .chatbot-toggle-btn:hover {
+      transform: scale(1.15);
+    }
+
+    /* Chatbot Window */
+    .chatbot-window {
+      position: fixed;
+      bottom: 110px;
+      right: 30px;
+      width: 420px;
+      max-height: 650px;
+      background: #ffffff;
+      border-radius: 15px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: 0.35s ease-in-out;
+      z-index: 999;
+    }
+
+    .chatbot-window.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .chatbot-window .card-header {
+      background: linear-gradient(90deg, #007bff, #0056d2);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chatbot-window .card-header button {
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .chatbot-messages {
+      max-height: 480px;
+      overflow-y: auto;
+      padding: 15px;
+      background: #f2f4f8;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-message {
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      max-width: 85%;
+      line-height: 1.4;
+    }
+
+    .chat-message.bot {
+      background: #e0eaff;
+      color: #003f9e;
+      align-self: flex-start;
+    }
+
+    .chat-message.user {
+      background: #ffe8a1;
+      color: #6a4d00;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .chatbot-input {
+      padding: 15px;
+      background: white;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 8px 12px;
+      outline: none;
+    }
+
+    .chatbot-input button {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .chatbot-input button:hover {
+      background: #0056d2;
+    }
+
+    /* Scrollbar */
+    .chatbot-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chatbot-messages::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating shapes -->
+  <div class="bg-shape"></div>
+  <div class="bg-shape"></div>
+  <div class="bg-shape"></div>
+
+  <!-- FLOATING CENTER NAVBAR -->
+  <header class="floating-header">
+    <div class="navbar-container">
+      <!-- Logo and Brand -->
+      <div class="navbar-logo">
+        <img src="Free-edx logo.png" width="55" height="55">
+        <h2 class="fw-bold text-primary ms-2">Free-Edex</h2>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="navbar-links">
+        <a href="#home" class="nav-item">Home</a>
+        <a href="#demo" class="nav-item">Demo</a> 
+        <a href="jee.html" class="nav-item">JEE</a>
+        <a href="#practice" class="nav-item">Practice & PYQs</a>
+        <a href="#about" class="nav-item">About</a>
+        <a href="#contact" class="nav-item">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <div class="container">
+      <h1>🌟 Welcome to <span class="text-primary">Free-Edex</span></h1>
+      <p>Your Gateway to Structured, Free Learning.</p>
+      <p>Are you overwhelmed by too many resources and no clear path?<br> You're not alone — and that's exactly why we built Free-Edex.</p>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">📚 What is Free-Edex?</h2>
+      <p class="section-text">Free-Edex is your one-stop platform for structured, high-quality, and 100% free learning paths for JEE Preparation (Mains & Advanced).<br>All our content is handpicked and organized with the help of IITians.</p>
+      
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+          <div class="card feature-card p-4 text-center">
+            <h5>✅ Structured Learning Paths</h5>
+            <p>From Class 11 to JEE Advanced — complete roadmap covering every concept in order.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card feature-card p-4 text-center">
+            <h5>🎓 IITian & NITian & IIITian's Curated</h5>
+            <div class="mentor-gallery">
+              <div class="mentor">
+                <img src="h4.jpg" alt="Anant Asati">
+                <p><b>Anant Asati</b><br><small>(IIT Bombay)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h2.jpg" alt="Krish Agrawal">
+                <p><b>Krish Agrawal</b><br><small>(IIT BHU)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h3.jpg" alt="Harshal Sakhre">
+                <p><b>Harshal Sakhre</b><br><small>(IIT BHU)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h1.jpg" alt="Shewtang Wasnik">
+                <p><b>Shewtang Wasnik</b><br><small>(NIT Warangal)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h5.jpg" alt="Ayush Dongra">
+                <p><b>Ayush Dongra</b><br><small>(IIT KGP)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h6.jpg" alt="Jay Sharma">
+                <p><b>Jay Sharma</b><br><small>(IIIT Allahabad)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h7.jpg" alt="Rohit Tandekar">
+                <p><b>Rohit Tandekar</b><br><small>(IIIT Allahabad)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h8.jpg" alt="Sohan Meshram">
+                <p><b>Sohan Meshram</b><br><small>(IIIT Nagpur)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h9.jpg" alt="Utkarsh Chouhan">
+                <p><b>Utkarsh Chouhan</b><br><small>(IIIT Vadodara)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h10.jpg" alt="Parth Upadhyay">
+                <p><b>Parth Upadhyay</b><br><small>(IIIT Vadodara)</small></p>
+              </div>
+              <div class="mentor">
+                <img src="h11.jpg" alt="Tanay Rawte">
+                <p><b>Tanay Rawte</b><br><small>(VNIT Nagpur)</small></p>
+              </div>
+            </div>
+            <p>Our mentors and top JEE rankers select the most effective free lectures and notes.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card feature-card p-4 text-center">
+            <h5>🚀 100% Free & Distraction-Free</h5>
+            <p>No ads, no paywalls — just pure learning with focus and clarity.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION SECTION -->
+  <section style="background: #e3f2fd;">
+    <div class="container text-center">
+      <h2 class="section-title">🎯 Our Mission</h2>
+      <p class="section-text">
+        At Free-Edex, we believe quality education should be accessible, structured, and free.<br>
+        We're not just another aggregator — we're your personal guide to mastering JEE.<br>
+        "We bring structure where the internet brings noise."
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section>
+    <div class="container text-center">
+      <h2 class="section-title">Choose Your Path</h2>
+      <p class="section-text">Start your JEE journey with a guided, step-by-step roadmap.</p>
+      <a href="jee.html" class="btn btn-primary btn-lg rounded-pill">🔸 Explore JEE Preparation</a>
+    </div>
+  </section>
+
+  <!-- PRACTICE SECTION -->
+  <section id="practice" style="background: #e3f2fd;">
+    <div class="container text-center">
+      <h2 class="section-title">🧠 Practice & PYQs</h2>
+      <p class="section-text">Sharpen your concepts and test yourself with official mock tests, previous year questions, and chapter-wise practice sets.</p>
+
+      <!-- Subject-wise PYQs -->
+      <div class="row justify-content-center g-4 mb-5">
+        <div class="col-md-4">
+          <div class="card feature-card p-4 text-center">
+            <h5>⚛️ Physics PYQs</h5>
+            <p>Attempt previous year JEE Main & Advanced Physics questions organized chapter-wise.</p>
+            <a href="https://share.google/rTcobPApfm77jGviD" target="_blank" class="btn btn-outline-primary rounded-pill">View Physics PYQs</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card feature-card p-4 text-center">
+            <h5>🧪 Chemistry PYQs</h5>
+            <p>Revise and practice Chemistry PYQs with detailed chapter-wise solutions.</p>
+            <a href="https://share.google/rTcobPApfm77jGviD" target="_blank" class="btn btn-outline-danger rounded-pill">View Chemistry PYQs</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card feature-card p-4 text-center">
+            <h5>📘 Mathematics PYQs</h5>
+            <p>Strengthen your problem-solving through past year Maths questions.</p>
+            <a href="https://share.google/rTcobPApfm77jGviD" target="_blank" class="btn btn-outline-success rounded-pill">View Maths PYQs</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Official Practice Links -->
+      <div class="row justify-content-center g-4">
+        <div class="col-md-6">
+          <div class="card feature-card p-4 text-center">
+            <h5>🎯 NTA Official Practice Quiz</h5>
+            <p>Attempt real-exam based quizzes directly from NTA's official portal.</p>
+            <a href="https://nta.ac.in/Quiz" target="_blank" class="btn btn-primary rounded-pill">Go to NTA Quiz Portal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO VIDEO SECTION -->
+  <section id="demo" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 60px 0; text-align: center;">
+    <div class="container">
+      <h2 class="section-title">🎥 Watch Free-Edex Demo</h2>
+      <p class="section-text">Here's a quick walkthrough of how to explore lectures, practice PYQs, and use Free-Edex effectively.</p>
+      <div style="display: flex; justify-content: center; align-items: center; margin-top: 30px;">
+        <video width="800" height="450" controls poster="Free-edx logo.png" style="border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.3);">
+          <source src="demo_mp3.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section id="contact" style="background: #bbdefb;">
+    <div class="container text-center">
+      <h2 class="section-title">📬 Get in Touch</h2>
+      <p class="section-text">Have questions or suggestions? We'd love to hear from you.</p>
+      <a href="mailto:contact@freeedex.com" class="btn btn-primary rounded-pill">✉️ Email Us</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Built with passion ❤️ | Powered by Free-Edex</p>
+    <p>© 2025 Free-Edex. All rights reserved.</p>
+  </footer>
+
+  <!-- CHATBOT TOGGLE BUTTON -->
+  <button id="chatbotToggle" class="chatbot-toggle-btn">💬</button>
+
+  <!-- CHATBOT WINDOW -->
+  <div id="chatbotWindow" class="chatbot-window">
+    <div class="card-header">
+      <span>JEE Doubt Bot</span>
+      <button type="button" id="chatbotClose">&times;</button>
+    </div>
+    
+    <div id="chatbotMessages" class="chatbot-messages">
+      <div class="chat-message bot">
+        Hi! 👋 I'm your JEE doubt helper. Ask me questions about Physics, Chemistry, or Maths.
+      </div>
+    </div>
+    
+    <div class="chatbot-input">
+      <input type="text" id="chatbotInput" placeholder="Type your doubt..." />
+      <button id="chatbotSend">Send</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- CHATBOT SCRIPT -->
+  <script>
+    const chatbotToggle = document.getElementById("chatbotToggle");
+    const chatbotWindow = document.getElementById("chatbotWindow");
+    const chatbotClose = document.getElementById("chatbotClose");
+    const chatbotMessages = document.getElementById("chatbotMessages");
+    const chatbotInput = document.getElementById("chatbotInput");
+    const chatbotSend = document.getElementById("chatbotSend");
+
+    const GEMINI_API_KEY = "AIzaSyAZZmP1CrhQYDSCKPVIB9HZ0ePxFtz-wEM";
+
+    chatbotToggle.addEventListener("click", () => {
+      chatbotWindow.classList.toggle("open");
+    });
+
+    chatbotClose.addEventListener("click", () => {
+      chatbotWindow.classList.remove("open");
+    });
+
+    function addMessage(text, sender) {
+      const div = document.createElement("div");
+      div.classList.add("chat-message", sender);
+      div.textContent = text;
+      chatbotMessages.appendChild(div);
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    async function callGemini(userText) {
+      const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+
+      const body = {
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text:
+                  "You are a helpful JEE tutor. Answer only JEE-related doubts (Physics, Chemistry, Maths)." +
+                  " Explain step by step in simple language and focus on JEE level.\n\nQuestion: " +
+                  userText
+              }
+            ]
+          }
+        ]
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": GEMINI_API_KEY
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("Gemini API error:", response.status, errText);
+        throw new Error("API error: " + response.status);
+      }
+
+      const data = await response.json();
+
+      const text =
+        data.candidates &&
+        data.candidates[0] &&
+        data.candidates[0].content &&
+        data.candidates[0].content.parts &&
+        data.candidates[0].content.parts[0].text
+          ? data.candidates[0].content.parts[0].text
+          : "Sorry, I couldn't understand that.";
+
+      return text;
+    }
+
+    async function handleSend() {
+      const text = chatbotInput.value.trim();
+      if (!text) return;
+
+      addMessage(text, "user");
+      chatbotInput.value = "";
+
+      const thinkingDiv = document.createElement("div");
+      thinkingDiv.classList.add("chat-message", "bot");
+      thinkingDiv.textContent = "Thinking...";
+      chatbotMessages.appendChild(thinkingDiv);
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+      try {
+        const reply = await callGemini(text);
+        thinkingDiv.textContent = reply;
+      } catch (err) {
+        console.error(err);
+        thinkingDiv.textContent =
+          "There was an error talking to Gemini. Please check your API key or try again.";
+      }
+    }
+
+    chatbotSend.addEventListener("click", handleSend);
+
+    chatbotInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+  </script>
+</body>
+</html>

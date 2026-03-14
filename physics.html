@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physics | Free-Edex</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <style>
+    /* Background and layout */
+    body {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb, #90caf9);
+      background-size: 400% 400%;
+      animation: bgFlow 16s ease infinite;
+      font-family: 'Poppins', sans-serif;
+      color: #0d47a1;
+      margin: 0;
+      padding: 0;
+    }
+    @keyframes bgFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header { text-align: center; padding: 40px 20px; }
+    header img { border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); margin-bottom: 20px; }
+    header h1 { color: #1a237e; font-weight: 700; font-size: 1.8rem; }
+
+    .physics-logo { display: flex; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 30px; }
+    .physics-logo img { width: 180px; height: auto; border-radius: 50%; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); border: 3px solid white; }
+
+    .instructions { max-width: 900px; margin: 40px auto; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); padding: 30px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    .instructions h2 { color: #0d47a1; font-weight: 700; margin-bottom: 15px; text-align: center; }
+    .instructions p { color: #37474f; font-size: 1rem; line-height: 1.6; }
+
+    ol { list-style: none; padding: 0; }
+    li { background: rgba(255, 255, 255, 0.9); margin: 30px auto; padding: 25px; max-width: 1200px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    li:hover { transform: translateY(-6px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
+    li b { color: #0d47a1; font-size: 1.3rem; }
+    iframe { border-radius: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+    footer { text-align: center; padding: 20px; font-style: italic; color: #1a237e; background: rgba(255, 255, 255, 0.7); border-top: 2px solid #90caf9; margin-top: 50px; }
+
+    /* Chatbot Button */
+    .chatbot-toggle-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s;
+      z-index: 999;
+      background-color: #ffc107;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .chatbot-toggle-btn:hover { transform: scale(1.15); }
+
+    /* Chatbot Window */
+    .chatbot-window {
+      position: fixed;
+      bottom: 110px;
+      right: 30px;
+      width: 420px;
+      max-height: 650px;
+      background: #ffffff;
+      border-radius: 15px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: 0.35s ease-in-out;
+      z-index: 999;
+    }
+    .chatbot-window.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+    .chatbot-window .card-header {
+      background: linear-gradient(90deg, #007bff, #0056d2);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chatbot-window .card-header button {
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .chatbot-messages {
+      max-height: 480px;
+      overflow-y: auto;
+      padding: 15px;
+      background: #f2f4f8;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-message { padding: 10px 14px; border-radius: 12px; margin-bottom: 10px; max-width: 85%; line-height: 1.4; }
+    .chat-message.bot { background: #e0eaff; color: #003f9e; align-self: flex-start; }
+    .chat-message.user { background: #ffe8a1; color: #6a4d00; align-self: flex-end; margin-left: auto; }
+    .chatbot-input { padding: 15px; background: white; display: flex; gap: 10px; border-top: 1px solid #e0e0e0; }
+    .chatbot-input input { flex: 1; border: 1px solid #ddd; border-radius: 10px; padding: 8px 12px; outline: none; }
+    .chatbot-input button { background: #007bff; color: white; border: none; border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 14px; }
+    .chatbot-input button:hover { background: #0056d2; }
+
+    /* Scrollbar */
+    .chatbot-messages::-webkit-scrollbar { width: 6px; }
+    .chatbot-messages::-webkit-scrollbar-thumb { background: #bbb; border-radius: 10px; }
+
+    /* Quiz Button */
+    #quizButton {
+      position: fixed;
+      bottom: 110px; /* above chatbot */
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+    #quizButton:hover { transform: scale(1.15); }
+
+    /* Quiz Modal */
+    #quizModal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 700px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      padding: 20px;
+      z-index: 1001;
+      display: none;
+      max-height: 80%;
+      overflow-y: auto;
+    }
+    #quizModal h2 { color: #0d47a1; text-align: center; margin-bottom: 20px; }
+    #quizModal button { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <img src="phy.jpg" width="800" height="400" alt="Physics Banner">
+    <h1><b>Welcome! Explore the Fascinating World of Physics</b></h1>
+  </header>
+
+  <!-- Physics Logo -->
+  <div class="physics-logo">
+    <img src="phys - Copy.jpg" alt="Physics Logo">
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions">
+    <h2>📘 Instructions</h2>
+    <p>
+      ✅ Click the lecture links below to start learning Physics.<br>
+      ✅ To play a video, click the play button in the center.<br>
+      ✅ To watch on YouTube, click the YouTube logo at the bottom right of the video.<br>
+      ✅ For practice questions, use the links provided with each lecture.<br>
+      ✅ Recommended to start with "Mathematical Tools and Vectors" for a strong foundation.<br>
+      ✅ For any doubts, use the Physics Doubt Bot at the bottom right corner.<br>
+      ✅ For attempting chapter-wise quizzes, click the 📚 button next to the doubt bot.
+    </p>
+  </div>
+
+  <h3 style="text-align:center; color:#1a237e; font-style:italic;">"Every physics concept you learn brings you closer to understanding the universe."</h3>
+  <hr style="width:80%; margin:auto; border: 1px solid #90caf9;">
+
+ <!-- Your Lecture List -->
+  <ol>
+    <li>
+     <big><b>Mathematical Tools and Vectors:--</b></big>
+<p>------Contains 13 lecture </p>
+<br><br>
+<div style="display: flex; gap: 20px;">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=a-Bd33tIiPcZSV_E&amp;list=PL0MI0lz_UQZxtWKs0Rympgh9ySSUOmTgG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=-p7G_HxrmQ4y8iaH&amp;list=PLbu_fGT0MPstroiXdyTMNiQlo4v5fzgTf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    
+</div>
+<br>
+<hr>
+    <br>
+    <hrader>
+        <i>-----From Here we will starting journey of Physics</i>
+    </hrader>
+    <br>
+    <hr>
+    <br>
+    <ol>
+      <li>
+    <big><b>Units and Measurement:--</b></big>
+    <p>------Contains 9 lectures and 2 DPP </p>
+    <p>------Contains 5 lectures </p>
+    
+    <br><br>
+    <div style="display: flex; gap: 20px;">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=jUXEvyySg7G44ZDn&amp;list=PLF_7kfnwLFCFFKkWI8iRKE2RW7-orWJ2N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=ov5SoI1axWPGPAAT&amp;list=PLbu_fGT0MPssmvVUwDYpbre8Ik5MfBR5e" title="YouTube new video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    </li>
+
+        <hr>
+       <li>
+    <big><b>Kinematics:--</b></big>
+    <p>------Contains 15 lecture </p>
+    <br><br>
+    <div style="display: flex; gap: 20px;">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=uMKbXsIKlN_weZQt&amp;list=PLF_7kfnwLFCHamOEHrFDSVoI6wszQQheq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=Se8yjbcSuv5zuKAW&amp;list=PLbu_fGT0MPsvB9xBGNtJX-9bIMc-T0lIk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+</li>
+<hr>
+        <li>
+    <big><b>Laws of Motion:--</b></big>
+    <p>------Contains 11 lecture </p>
+    <br><br>
+    <div style="display: flex; gap: 20px;">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=_3g-loUnkmwU65TQ&amp;list=PLF_7kfnwLFCGcF1IhVgTiZ-Sf0pnKIOub" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="560" height="315"  src="https://www.youtube.com/embed/videoseries?si=HeDgLjs5fkmHmQM0&amp;list=PLbu_fGT0MPsuNdAhq2AAQ0PRMJjrpJXMf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+</li>
+<hr>
+        <li>
+            <big><b>Work Power and Energy:--</b></big>
+            <p>------Contains 7 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=467upv6T5wFN7v-c&amp;list=PLF_7kfnwLFCFS0k0WNHuTvjRxJFKQK5qr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Circular Motion:--</b></big>
+            <p>------Contains 7 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=FSJ8BrljDtionNjW&amp;list=PLF_7kfnwLFCEf62gm29dPIJfIHj2ozlkx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Center of Mass:--</b></big>
+            <p>------Contains 12 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=tqa61TK-P3dBa1nE&amp;list=PLF_7kfnwLFCGAL8XxoX2I8SjMXMtc07Yt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Rotational Dynamics:--</b></big>
+            <p>------Contains 17 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=jKFktdE8DTYHTRPt&amp;list=PLF_7kfnwLFCHPUM8UWjv2uy4S08SCtjEh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Simple Harmonic Motion:--</b></big>
+            <p>------Contains 14 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=ZD0mdZTbGwjEDG2E&amp;list=PLF_7kfnwLFCEvhpUaPoDQvhPwug0aZ1R4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Gravitation:--</b></big>
+            <p>------Contains 12 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=uk0G8vV4edPPk3Al&amp;list=PLF_7kfnwLFCEwyxzG-rg2uYeYA2q1S2d8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Electrostatics:--</b></big>
+            <p>------Contains 17 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=8sAVOaHtXXDGDfEF&amp;list=PLF_7kfnwLFCHjzvhflQjAOG97MgutH3Z5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Capacitance:--</b></big>
+            <p>------Contains 9 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=bKWZHQuyW59wO522&amp;list=PLcxc6ed1fsRSpxKh2Bqpj50DfDN90Fbg0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Electromagnetic Induction(EMI):--</b></big>
+            <p>------Contains 9 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=uKcLWNe-h_xo6rZ_&amp;list=PLF_7kfnwLFCE6mi_so22MJJ988uaHBJaQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Alternating Current:--</b></big>
+            <p>------Contains 8 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=S7Ha2kHvdvty7K2u&amp;list=PLF_7kfnwLFCELMB-TfYgbfAN2nuP-z4t5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Ray Optics:--</b></big>
+            <p>------Contains 23 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=rdFbtjA40bO8txjJ&amp;list=PLF_7kfnwLFCFxb0yvMYbPqzvZn2GN5aMw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+           
+        </li>
+        <hr>
+        <li>
+            <big><b>Wave Optics:--</b></big>
+            <p>------Contains 8 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=HC4sZj4oDmYbZ6UE&amp;list=PLF_7kfnwLFCHr4eZATw4YURnGNr6mwF5R" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+           
+        </li>
+        <hr>
+        <li>
+            <big><b>Electromagnetic Waves:--</b></big>
+            <p>------Contains 6 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=Qr5a-Gnxizfsz97w&amp;list=PL_ZWmqusGLGCEb3NAhPJs8ifZjDagroeg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+           
+        </li>
+        <hr>
+        <li>
+            <big><b>Waves:--</b></big>
+            <p>------Contains 14 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=TaFYeTVnr2rmqQOF&amp;list=PLF_7kfnwLFCEp1eygWPhgPI6A9th2Fw-S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+           
+        </li>
+        <hr>
+        <li>
+            <big><b>Modern Physics:--</b></big>
+            <p>------Contains 1 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/vP9LzR8zupE?si=CASBZVqiq8B6GEqh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+           
+        </li>
+        <hr>
+        <li>
+            <big><b>Thermo Dynamics:--</b></big>
+            <p>------Contains 1 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/9z7TuOT8Q4o?si=DpqH0RcEmNd5NPyB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+           
+        </li>
+        <hr>
+        <li>
+            <big><b>Fluid Mechanics:--</b></big>
+            <p>------Contains 12 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=HHqvslnV6h6JWpvM&amp;list=PLF_7kfnwLFCHXd4k2jaPkHOBMzzGCq7t0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+           
+        </li>
+        <hr>
+        <li>
+            <big><b>Mechanical Properties of Solid:--</b></big>
+            <p>------Contains 6 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=hb9wM7pdOuFLh7_4&amp;list=PLXUcuCHnGjCpbbG5p4QqmziFEV_MnS3Xt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+           
+        </li>
+        <hr>
+        <li>
+            <big><b>Semiconductor:--</b></big>
+            <p>------Contains 1 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/jnrdo0vFuco?si=eUJ2w1yDlISL_MyC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+        <li>
+            <big><b>Communication System:--</b></big>
+            <p>------Contains 1 lecture </p>
+            <br><br>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/BALwoE1ZgTE?si=tC1M3eVDYJ1IpKX9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </li>
+        <hr>
+    </ol>
+  </ol>
+  <footer><i>Wish you all the best</i></footer>
+
+<!-- Quiz Button (Icon Only) -->
+<button id="quizButton" class="btn btn-primary btn-lg" 
+        style="display:block; margin:20px auto; width:60px; height:60px; border-radius:50%; font-size:24px;">
+  📚
+</button>
+
+
+<!-- Quiz Modal -->
+<div id="quizModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:white; border-radius:15px; padding:20px; max-width:90%; max-height:80%; overflow-y:auto;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3); z-index:1000;">
+  <h2>Physics Chapter-wise Quiz</h2>
+  <div id="quizContent">
+
+    <!-- Chapter 1: Mathematical Tools and Vectors -->
+    <div class="quiz-chapter">
+      <h4>1. Mathematical Tools and Vectors</h4>
+      <p>Q1: The dot product of two perpendicular vectors is?</p>
+      <input type="radio" name="q1" value="Zero"> Zero<br>
+      <input type="radio" name="q1" value="One"> One<br>
+      <input type="radio" name="q1" value="Depends on magnitude"> Depends on magnitude<br>
+
+      <p>Q2: Magnitude of vector (3i + 4j) is?</p>
+      <input type="radio" name="q2" value="5"> 5<br>
+      <input type="radio" name="q2" value="7"> 7<br>
+      <input type="radio" name="q2" value="25"> 25<br>
+    </div>
+
+    <hr>
+
+    <!-- Chapter 2: Kinematics -->
+    <div class="quiz-chapter">
+      <h4>2. Kinematics</h4>
+      <p>Q1: Displacement in uniformly accelerated motion is given by?</p>
+      <input type="radio" name="kq1" value="v*t"> v*t<br>
+      <input type="radio" name="kq1" value="u*t + 1/2*a*t^2"> u*t + 1/2*a*t^2<br>
+      <input type="radio" name="kq1" value="a*t^2"> a*t^2<br>
+
+      <p>Q2: Velocity-time graph of a particle moving with constant acceleration is?</p>
+      <input type="radio" name="kq2" value="Linear"> Linear<br>
+      <input type="radio" name="kq2" value="Parabolic"> Parabolic<br>
+      <input type="radio" name="kq2" value="Hyperbolic"> Hyperbolic<br>
+    </div>
+
+    <hr>
+
+    <!-- Chapter 3: Laws of Motion -->
+    <div class="quiz-chapter">
+      <h4>3. Laws of Motion</h4>
+      <p>Q1: The force that opposes relative motion of two surfaces in contact is?</p>
+      <input type="radio" name="lq1" value="Friction"> Friction<br>
+      <input type="radio" name="lq1" value="Tension"> Tension<br>
+      <input type="radio" name="lq1" value="Normal"> Normal<br>
+
+      <p>Q2: Newton’s second law states?</p>
+      <input type="radio" name="lq2" value="F = ma"> F = ma<br>
+      <input type="radio" name="lq2" value="F = m/v"> F = m/v<br>
+      <input type="radio" name="lq2" value="F = m+ a"> F = m + a<br>
+    </div>
+
+    <hr>
+
+    <hr>
+
+<!-- Chapter 4: Work, Power and Energy -->
+<div class="quiz-chapter">
+  <h4>4. Work, Power and Energy</h4>
+  <p>Q1: A body of mass 2 kg is moving with velocity 3 m/s. Its kinetic energy is?</p>
+  <input type="radio" name="wq1" value="3 J"> 3 J<br>
+  <input type="radio" name="wq1" value="6 J"> 6 J<br>
+  <input type="radio" name="wq1" value="9 J"> 9 J<br>
+  <p>Q2: A 10 N force is applied on a 2 kg body for 5 seconds from rest. Work done is?</p>
+  <input type="radio" name="wq2" value="25 J"> 25 J<br>
+  <input type="radio" name="wq2" value="50 J"> 50 J<br>
+  <input type="radio" name="wq2" value="75 J"> 75 J<br>
+</div>
+
+<hr>
+
+<!-- Chapter 5: Circular Motion -->
+<div class="quiz-chapter">
+  <h4>5. Circular Motion</h4>
+  <p>Q1: A car of mass 1000 kg moves with speed 20 m/s on a circular track of radius 50 m. Centripetal force is?</p>
+  <input type="radio" name="cq1" value="8000 N"> 8000 N<br>
+  <input type="radio" name="cq1" value="4000 N"> 4000 N<br>
+  <input type="radio" name="cq1" value="6000 N"> 6000 N<br>
+  <p>Q2: Two satellites move in circular orbits of radii r and 4r. Ratio of their velocities?</p>
+  <input type="radio" name="cq2" value="1:2"> 1:2<br>
+  <input type="radio" name="cq2" value="2:1"> 2:1<br>
+  <input type="radio" name="cq2" value="1:√2"> 1:√2<br>
+</div>
+
+<hr>
+
+<!-- Chapter 6: Rotational Dynamics -->
+<div class="quiz-chapter">
+  <h4>6. Rotational Dynamics</h4>
+  <p>Q1: Solid cylinder (mass 2 kg, radius 0.5 m) rolls without slipping. Moment of inertia?</p>
+  <input type="radio" name="rq1" value="0.25 kg·m²"> 0.25 kg·m²<br>
+  <input type="radio" name="rq1" value="0.5 kg·m²"> 0.5 kg·m²<br>
+  <input type="radio" name="rq1" value="1 kg·m²"> 1 kg·m²<br>
+  <p>Q2: Wheel of moment of inertia 10 kg·m² rotates at 5 rad/s. Rotational kinetic energy?</p>
+  <input type="radio" name="rq2" value="50 J"> 50 J<br>
+  <input type="radio" name="rq2" value="125 J"> 125 J<br>
+  <input type="radio" name="rq2" value="150 J"> 150 J<br>
+</div>
+
+<hr>
+
+<!-- Chapter 7: Simple Harmonic Motion -->
+<div class="quiz-chapter">
+  <h4>7. Simple Harmonic Motion</h4>
+  <p>Q1: A particle executes SHM with amplitude 0.1 m and period 2 s. Maximum velocity?</p>
+  <input type="radio" name="shq1" value="0.314 m/s"> 0.314 m/s<br>
+  <input type="radio" name="shq1" value="0.628 m/s"> 0.628 m/s<br>
+  <input type="radio" name="shq1" value="1 m/s"> 1 m/s<br>
+  <p>Q2: Time period of SHM depends on?</p>
+  <input type="radio" name="shq2" value="Amplitude only"> Amplitude only<br>
+  <input type="radio" name="shq2" value="Mass and spring constant"> Mass and spring constant<br>
+  <input type="radio" name="shq2" value="Velocity"> Velocity<br>
+</div>
+
+<hr>
+
+<!-- Chapter 8: Gravitation -->
+<div class="quiz-chapter">
+  <h4>8. Gravitation</h4>
+  <p>Q1: Acceleration due to gravity on surface of Earth?</p>
+  <input type="radio" name="gq1" value="9.8 m/s²"> 9.8 m/s²<br>
+  <input type="radio" name="gq1" value="10 m/s²"> 10 m/s²<br>
+  <input type="radio" name="gq1" value="9 m/s²"> 9 m/s²<br>
+  <p>Q2: Orbital velocity of a satellite depends on?</p>
+  <input type="radio" name="gq2" value="Radius of orbit"> Radius of orbit<br>
+  <input type="radio" name="gq2" value="Mass of satellite"> Mass of satellite<br>
+  <input type="radio" name="gq2" value="Gravitational constant"> Gravitational constant only<br>
+</div>
+
+<hr>
+
+
+
+
+    <button id="submitQuiz" class="btn btn-success">Submit Quiz</button>
+    <button id="closeQuiz" class="btn btn-danger" style="margin-left:10px;">Close</button>
+    <p id="quizResult" style="margin-top:15px; font-weight:bold; color:#0d47a1;"></p>
+  </div>
+</div>
+
+<script>
+  const quizButton = document.getElementById("quizButton");
+  const quizModal = document.getElementById("quizModal");
+  const submitQuiz = document.getElementById("submitQuiz");
+  const closeQuiz = document.getElementById("closeQuiz");
+  const quizResult = document.getElementById("quizResult");
+
+  // Answers for checking
+  const answers = {
+    q1: "Zero",
+    q2: "5",
+    kq1: "u*t + 1/2*a*t^2",
+    kq2: "Linear",
+    lq1: "Friction",
+    lq2: "F = ma"
+  };
+
+  // Open quiz modal
+  quizButton.addEventListener("click", () => {
+    quizModal.style.display = "block";
+    quizResult.textContent = "";
+  });
+
+  // Close quiz modal
+  closeQuiz.addEventListener("click", () => {
+    quizModal.style.display = "none";
+  });
+
+  // Submit quiz and calculate score
+  submitQuiz.addEventListener("click", () => {
+    let score = 0;
+    for (const [key, value] of Object.entries(answers)) {
+      const selected = document.querySelector(`input[name=${key}]:checked`);
+      if (selected && selected.value === value) score++;
+    }
+    quizResult.textContent = `You scored ${score} out of ${Object.keys(answers).length}`;
+  });
+</script>
+
+
+  <!-- Chatbot -->
+  <button id="chatbotToggle" class="chatbot-toggle-btn">💬</button>
+  <div id="chatbotWindow" class="chatbot-window">
+    <div class="card-header">
+      <span>Physics Doubt Bot</span>
+      <button type="button" id="chatbotClose">&times;</button>
+    </div>
+    <div id="chatbotMessages" class="chatbot-messages">
+      <div class="chat-message bot">
+        Hi! 👋 I'm your Physics doubt helper. Ask me questions related to any topic.
+      </div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatbotInput" placeholder="Type your Physics doubt..." />
+      <button id="chatbotSend">Send</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Chatbot JS
+    const chatbotToggle = document.getElementById("chatbotToggle");
+    const chatbotWindow = document.getElementById("chatbotWindow");
+    const chatbotClose = document.getElementById("chatbotClose");
+    const chatbotMessages = document.getElementById("chatbotMessages");
+    const chatbotInput = document.getElementById("chatbotInput");
+    const chatbotSend = document.getElementById("chatbotSend");
+
+    chatbotToggle.addEventListener("click", () => { chatbotWindow.classList.toggle("open"); });
+    chatbotClose.addEventListener("click", () => { chatbotWindow.classList.remove("open"); });
+
+    function addMessage(text, sender) {
+      const div = document.createElement("div");
+      div.classList.add("chat-message", sender);
+      div.textContent = text;
+      chatbotMessages.appendChild(div);
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    async function handleSend() {
+      const text = chatbotInput.value.trim();
+      if (!text) return;
+      addMessage(text, "user");
+      chatbotInput.value = "";
+      addMessage("Thinking...", "bot");
+    }
+
+    chatbotSend.addEventListener("click", handleSend);
+    chatbotInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); handleSend(); } });
+
+    // Quiz JS
+    quizButton.addEventListener("click", () => { quizModal.style.display = "block"; });
+    submitQuiz.addEventListener("click", () => {
+      let score = 0;
+      if (document.getElementById("q1").value.toLowerCase().includes("newton")) score++;
+      if (document.getElementById("q2").value.includes("9.8") || document.getElementById("q2").value.includes("9.81")) score++;
+      quizResult.textContent = "You scored " + score + " out of 2";
+    });
+  </script>
+</body>
+</html>
